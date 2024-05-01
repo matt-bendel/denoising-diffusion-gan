@@ -163,8 +163,6 @@ def sample_and_test(args, y, mask):
 
     x_t_1 = torch.randn(args.batch_size, args.num_channels, args.image_size, args.image_size).to(device)
     fake_sample = sample_from_model(pos_coeff, netG, args.num_timesteps, x_t_1, T, args, y, mask)
-    print(torch.min(fake_sample))
-    print(torch.max(fake_sample))
     fake_sample = to_range_0_1(fake_sample)
     torchvision.utils.save_image(fake_sample, 'samples_fake.jpg')
 
@@ -233,7 +231,7 @@ if __name__ == '__main__':
                         help='size of image')
 
     parser.add_argument('--nz', type=int, default=100)
-    parser.add_argument('--num_timesteps', type=int, default=4)
+    parser.add_argument('--num_timesteps', type=int, default=2)
 
     parser.add_argument('--z_emb_dim', type=int, default=256)
     parser.add_argument('--t_emb_dim', type=int, default=256)
