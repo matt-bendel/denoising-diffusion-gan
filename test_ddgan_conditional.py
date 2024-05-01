@@ -163,7 +163,7 @@ def sample_and_test(args, y, mask):
 
     x_t_1 = torch.randn(args.batch_size, args.num_channels, args.image_size, args.image_size).to(device)
     fake_sample = sample_from_model(pos_coeff, netG, args.num_timesteps, x_t_1, T, args, y, mask)
-    # fake_sample = to_range_0_1(fake_sample)
+    fake_sample = to_range_0_1(fake_sample)
     torchvision.utils.save_image(fake_sample, 'samples_fake.jpg')
 
 if __name__ == '__main__':
