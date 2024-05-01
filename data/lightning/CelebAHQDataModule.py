@@ -27,7 +27,7 @@ class DataTransform:
                 a given volume every time.
         """
         self.args = args
-        self.mask_creator = MaskCreator()
+        # self.mask_creator = MaskCreator()
 
     def __call__(self, gt_im):
         # mask1 = self.mask_creator.stroke_mask(self.args.image_size, self.args.image_size, max_length=self.args.image_size//2)
