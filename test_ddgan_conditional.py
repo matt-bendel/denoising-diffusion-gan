@@ -133,8 +133,8 @@ def sample_from_model(coefficients, generator, n_time, x_init, T, opt, y, mask):
             latent_z = torch.randn(x.size(0), opt.nz, device=x.device)  # .to(x.device)
             x_0 = generator(x, t_time, latent_z)
             x_new = sample_posterior(coefficients, x_0, x, t)
-            y_new = sample_posterior(coefficients, y, x, t)
-            x_new = y_new + (1 - mask) * x_new
+            # y_new = sample_posterior(coefficients, y, x, t)
+            # x_new = y_new + (1 - mask) * x_new
             x = x_new.detach()
 
     return x
