@@ -127,6 +127,7 @@ def sample_from_model(coefficients, generator, n_time, x_init, T, opt, y, mask):
     x = x_init
     with torch.no_grad():
         for i in reversed(range(n_time)):
+            torchvision.utils.save_image(x, f'samples_fake_{i}.jpg')
             t = torch.full((x.size(0),), i, dtype=torch.int64).to(x.device)
 
             t_time = t
@@ -145,7 +146,7 @@ def sample_and_test(args, y, mask):
     torch.manual_seed(42)
     device = 'cuda:0'
 
-    to_range_0_1 = lambda x: (x + 2) / 4
+    to_range_0_1 = lambda x: (x + 1) / 2
 
     netG = NCSNpp(args).to(device)
     ckpt = torch.load('/storage/matt_models/ddgan/netG_550.pth',
