@@ -172,7 +172,7 @@ if __name__ == '__main__':
                         help='seed used for initialization')
     parser.add_argument('--compute_fid', action='store_true', default=False,
                         help='whether or not compute FID')
-    parser.add_argument('--epoch_id', type=int, default=1000)
+    parser.add_argument('--epoch_id', type=int, default=550)
     parser.add_argument('--num_channels', type=int, default=3,
                         help='channel of image')
     parser.add_argument('--centered', action='store_false', default=True,
@@ -183,7 +183,7 @@ if __name__ == '__main__':
     parser.add_argument('--beta_max', type=float, default=20.,
                         help='beta_max for diffusion')
 
-    parser.add_argument('--num_channels_dae', type=int, default=128,
+    parser.add_argument('--num_channels_dae', type=int, default=64,
                         help='number of initial channels in denosing model')
     parser.add_argument('--n_mlp', type=int, default=3,
                         help='number of mlp layers for z')
@@ -222,12 +222,12 @@ if __name__ == '__main__':
     parser.add_argument('--not_use_tanh', action='store_true', default=False)
 
     # geenrator and training
-    parser.add_argument('--exp', default='experiment_cifar_default', help='name of experiment')
+    parser.add_argument('--exp', default='experiment_celeba_cond', help='name of experiment')
     parser.add_argument('--real_img_dir', default='./pytorch_fid/cifar10_train_stat.npy',
                         help='directory to real images for FID computation')
 
-    parser.add_argument('--dataset', default='cifar10', help='name of dataset')
-    parser.add_argument('--image_size', type=int, default=32,
+    parser.add_argument('--dataset', default='celeba_256', help='name of dataset')
+    parser.add_argument('--image_size', type=int, default=256,
                         help='size of image')
 
     parser.add_argument('--nz', type=int, default=100)
