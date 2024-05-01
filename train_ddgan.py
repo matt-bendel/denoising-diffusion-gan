@@ -335,7 +335,7 @@ def train(rank, gpu, args):
         train_sampler.set_epoch(epoch)
        
         for iteration, data in enumerate(data_loader):
-            _, x, _, _, _ = data[0]
+            x = data[0]
 
             for p in netD.parameters():  
                 p.requires_grad = True  
