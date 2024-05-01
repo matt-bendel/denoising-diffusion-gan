@@ -145,7 +145,7 @@ def sample_and_test(args, y, mask):
     torch.manual_seed(42)
     device = 'cuda:0'
 
-    to_range_0_1 = lambda x: (x + 0.5) / 0.5
+    to_range_0_1 = lambda x: (x + 2) / 4
 
     netG = NCSNpp(args).to(device)
     ckpt = torch.load('/storage/matt_models/ddgan/netG_550.pth',
