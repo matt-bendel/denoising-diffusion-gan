@@ -150,7 +150,7 @@ def sample_and_test(args):
     to_range_0_1 = lambda x: (x + 1.) / 2.
 
     netG = NCSNpp(args).to(device)
-    ckpt = torch.load('./saved_info/dd_gan/{}/{}/netG_{}.pth'.format(args.dataset, args.exp, args.epoch_id),
+    ckpt = torch.load('/storage/matt_models/ddgan/netG_550.pth',
                       map_location=device)
 
     # loading weights from ddp in single gpu
@@ -267,10 +267,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    test_transform = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-    ])
     seed_everything(1, workers=True)
 
     fname = 'configs/celebahq.yml'
