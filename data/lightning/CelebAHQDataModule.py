@@ -64,9 +64,13 @@ class CelebAHQDataModule(pl.LightningDataModule):
     def prepare_data(self):
         pass
 
-    def setup(self, stage: Optional[str] = None):
+    def setup(self, stage: Optional[str] = None, transforms=False):
         # Assign train/val datasets for use in dataloaders
-        transform = transforms.Compose([transforms.ToTensor(), DataTransform(self.args)])
+        if transforms:
+            transform = transforms
+        else:
+            transform = transforms.Compose([transforms.ToTensor(), DataTransform(self.args)])
+
         dataset = datasets.ImageFolder(self.args.data_path, transform=transform)
         train_data, dev_data, test_data = torch.utils.data.random_split(
             dataset, [27000, 2000, 1000],

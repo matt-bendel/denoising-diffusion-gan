@@ -22,7 +22,7 @@ from torchvision.datasets import CIFAR10
 from datasets_prep.lsun import LSUN
 from datasets_prep.stackmnist_data import StackedMNIST, _data_transforms_stacked_mnist
 from datasets_prep.lmdb_datasets import LMDBDataset
-
+from data.lightning.CelebAHQDataModule import CelebAHQDataModule
 
 from torch.multiprocessing import Process
 import torch.distributed as dist
@@ -235,7 +235,16 @@ def train(rank, gpu, args):
                 transforms.ToTensor(),
                 transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
             ])
-        dataset = LMDBDataset(root='/datasets/celeba-lmdb/', name='celeba', train=True, transform=train_transform)
+        fname = 'configs/celebahq.yml'
+
+        with open(fname, 'r') as f:
+            cfg = yaml.load(f, Loader=yaml.FullLoader)
+            cfg = json.loads(json.dumps(cfg), object_hook=load_object)
+
+        dm = CelebAHQDataModule(cfg)
+        dm.setup(transforms=train_transform)
+        dataset = dm.train
+        # dataset = LMDBDataset(root='/datasets/celeba-lmdb/', name='celeba', train=True, transform=train_transform)
       
     
     
@@ -321,7 +330,9 @@ def train(rank, gpu, args):
     for epoch in range(init_epoch, args.num_epoch+1):
         train_sampler.set_epoch(epoch)
        
-        for iteration, (x, y) in enumerate(data_loader):
+        for iteration, data in enumerate(data_loader):
+            _, x, _, _, _ = data[0]
+
             for p in netD.parameters():  
                 p.requires_grad = True  
         
