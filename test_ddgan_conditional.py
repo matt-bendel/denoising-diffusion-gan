@@ -8,6 +8,7 @@ import argparse
 import torch
 import numpy as np
 import yaml
+import types
 import json
 import os
 
@@ -15,6 +16,9 @@ import torchvision
 from score_sde.models.ncsnpp_generator_adagn import NCSNpp
 from pytorch_fid.fid_score import calculate_fid_given_paths
 from data.lightning.CelebAHQDataModule import CelebAHQDataModule
+
+def load_object(dct):
+    return types.SimpleNamespace(**dct)
 
 # %% Diffusion coefficients
 def var_func_vp(t, beta_min, beta_max):
