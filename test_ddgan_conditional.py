@@ -13,7 +13,7 @@ import os
 import torchvision
 from score_sde.models.ncsnpp_generator_adagn import NCSNpp
 from pytorch_fid.fid_score import calculate_fid_given_paths
-
+from data.lightning.CelebAHQDataModule import CelebAHQDataModule
 
 # %% Diffusion coefficients
 def var_func_vp(t, beta_min, beta_max):
@@ -271,15 +271,23 @@ if __name__ == '__main__':
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
-    dataset = LMDBDataset(root='/datasets/celeba-lmdb/', name='celeba', train=False, transform=test_transform)
+    seed_everything(1, workers=True)
 
-    data_loader = torch.utils.data.DataLoader(dataset,
-                                              batch_size=args.batch_size,
-                                              shuffle=False,
-                                              num_workers=4)
+    fname = 'configs/celebahq.yml'
 
-    for i, data in enumerate(data_loader):
-        print(data.shape)
+    with open(fname, 'r') as f:
+        cfg = yaml.load(f, Loader=yaml.FullLoader)
+        cfg = json.loads(json.dumps(cfg), object_hook=load_object)
+
+    dm = CelebAHQDataModule(cfg)
+    dm.setup()
+    test_loader = dm.test_dataloader()
+
+    for i, data in enumerate(test_loader):
+        y, x, mask, mean, std = data[0]
+
+        print(y.shape)
+        exit()
 
     # sample_and_test(args)
 
