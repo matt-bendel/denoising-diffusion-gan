@@ -235,7 +235,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--z_emb_dim', type=int, default=256)
     parser.add_argument('--t_emb_dim', type=int, default=256)
-    parser.add_argument('--batch_size', type=int, default=100, help='sample generating batch size')
+    parser.add_argument('--batch_size', type=int, default=10, help='sample generating batch size')
 
     args = parser.parse_args()
 
