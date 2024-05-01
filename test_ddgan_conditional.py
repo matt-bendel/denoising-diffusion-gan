@@ -123,7 +123,7 @@ def sample_posterior(coefficients, x_0, x_t, t):
     return sample_x_pos
 
 
-def sample_from_model(coefficients, generator, n_time, x_init, T, opt):
+def sample_from_model(coefficients, generator, n_time, x_init, T, opt, y, mask):
     x = x_init
     with torch.no_grad():
         for i in reversed(range(n_time)):
@@ -133,24 +133,17 @@ def sample_from_model(coefficients, generator, n_time, x_init, T, opt):
             latent_z = torch.randn(x.size(0), opt.nz, device=x.device)  # .to(x.device)
             x_0 = generator(x, t_time, latent_z)
             x_new = sample_posterior(coefficients, x_0, x, t)
+            y_new = sample_posterior(coefficients, y, x_t, t)
+            x_new = y_new + (1 - mask) * x_new
             x = x_new.detach()
 
     return x
 
 
 # %%
-def sample_and_test(args):
+def sample_and_test(args, y, mask):
     torch.manual_seed(42)
     device = 'cuda:0'
-
-    if args.dataset == 'cifar10':
-        real_img_dir = 'pytorch_fid/cifar10_train_stat.npy'
-    elif args.dataset == 'celeba_256':
-        real_img_dir = 'pytorch_fid/celeba_256_stat.npy'
-    elif args.dataset == 'lsun':
-        real_img_dir = 'pytorch_fid/lsun_church_stat.npy'
-    else:
-        real_img_dir = args.real_img_dir
 
     to_range_0_1 = lambda x: (x + 1.) / 2.
 
@@ -168,36 +161,10 @@ def sample_and_test(args):
 
     pos_coeff = Posterior_Coefficients(args, device)
 
-    iters_needed = 50000 // args.batch_size
-
-    save_dir = "./generated_samples/{}".format(args.dataset)
-
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
-
-    if args.compute_fid:
-        for i in range(iters_needed):
-            with torch.no_grad():
-                x_t_1 = torch.randn(args.batch_size, args.num_channels, args.image_size, args.image_size).to(device)
-                fake_sample = sample_from_model(pos_coeff, netG, args.num_timesteps, x_t_1, T, args)
-
-                fake_sample = to_range_0_1(fake_sample)
-                for j, x in enumerate(fake_sample):
-                    index = i * args.batch_size + j
-                    torchvision.utils.save_image(x, './generated_samples/{}/{}.jpg'.format(args.dataset, index))
-                print('generating batch ', i)
-
-        paths = [save_dir, real_img_dir]
-
-        kwargs = {'batch_size': 100, 'device': device, 'dims': 2048}
-        fid = calculate_fid_given_paths(paths=paths, **kwargs)
-        print('FID = {}'.format(fid))
-    else:
-        x_t_1 = torch.randn(args.batch_size, args.num_channels, args.image_size, args.image_size).to(device)
-        fake_sample = sample_from_model(pos_coeff, netG, args.num_timesteps, x_t_1, T, args)
-        fake_sample = to_range_0_1(fake_sample)
-        torchvision.utils.save_image(fake_sample, './samples_{}.jpg'.format(args.dataset))
-
+    x_t_1 = torch.randn(args.batch_size, args.num_channels, args.image_size, args.image_size).to(device)
+    fake_sample = sample_from_model(pos_coeff, netG, args.num_timesteps, x_t_1, T, args, y, mask)
+    fake_sample = to_range_0_1(fake_sample)
+    torchvision.utils.save_image(fake_sample, 'samples_fake.jpg')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('ddgan parameters')
@@ -268,7 +235,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--z_emb_dim', type=int, default=256)
     parser.add_argument('--t_emb_dim', type=int, default=256)
-    parser.add_argument('--batch_size', type=int, default=200, help='sample generating batch size')
+    parser.add_argument('--batch_size', type=int, default=100, help='sample generating batch size')
 
     args = parser.parse_args()
 
@@ -285,9 +252,10 @@ if __name__ == '__main__':
     for i, data in enumerate(test_loader):
         y, x, mask, mean, std = data[0]
 
-        print(y.shape)
+        sample_and_test(args, y, mask)
+        torchvision.utils.save_image(x, 'samples_real.jpg')
+
         exit()
 
-    # sample_and_test(args)
 
 
