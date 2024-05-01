@@ -292,7 +292,7 @@ def train(rank, gpu, args):
 
     
     exp = args.exp
-    parent_dir = "./saved_info/dd_gan/{}".format(args.dataset)
+    parent_dir = "/storage/matt_models/ddgan"
 
     exp_path = os.path.join(parent_dir,exp)
     if rank == 0:
