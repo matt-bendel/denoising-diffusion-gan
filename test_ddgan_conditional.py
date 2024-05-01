@@ -251,6 +251,8 @@ if __name__ == '__main__':
 
     for i, data in enumerate(test_loader):
         y, x, mask, mean, std = data[0]
+        y = y.cuda()
+        mask = mask.cuda()
 
         sample_and_test(args, y, mask)
         torchvision.utils.save_image(x, 'samples_real.jpg')
