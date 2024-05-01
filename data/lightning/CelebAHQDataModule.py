@@ -2,7 +2,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 import pytorch_lightning as pl
 from typing import Optional
-from utils.inpaint.get_mask import MaskCreator
+# from utils.inpaint.get_mask import MaskCreator
 
 import pathlib
 import cv2
@@ -30,17 +30,17 @@ class DataTransform:
         self.mask_creator = MaskCreator()
 
     def __call__(self, gt_im):
-        mask1 = self.mask_creator.stroke_mask(self.args.image_size, self.args.image_size, max_length=self.args.image_size//2)
-        mask2 = self.mask_creator.rectangle_mask(self.args.image_size, self.args.image_size, self.args.image_size//4, self.args.image_size//2)
+        # mask1 = self.mask_creator.stroke_mask(self.args.image_size, self.args.image_size, max_length=self.args.image_size//2)
+        # mask2 = self.mask_creator.rectangle_mask(self.args.image_size, self.args.image_size, self.args.image_size//4, self.args.image_size//2)
 
-        mask = mask1+mask2
-        mask = mask > 0
-        mask = mask.astype(np.float)
-        mask = torch.from_numpy(1 - mask).unsqueeze(0)
+        # mask = mask1+mask2
+        # mask = mask > 0
+        # mask = mask.astype(np.float)
+        # mask = torch.from_numpy(1 - mask).unsqueeze(0)
 
-        # arr = np.ones((256, 256))
-        # arr[256 // 4: 3 * 256 // 4, 256 // 4: 3 * 256 // 4] = 0
-        # mask = torch.tensor(np.reshape(arr, (256, 256)), dtype=torch.float).repeat(3, 1, 1)
+        arr = np.ones((256, 256))
+        arr[256 // 4: 3 * 256 // 4, 256 // 4: 3 * 256 // 4] = 0
+        mask = torch.tensor(np.reshape(arr, (256, 256)), dtype=torch.float).repeat(3, 1, 1)
 
         mean = torch.tensor([0.5, 0.5, 0.5])
         std = torch.tensor([0.5, 0.5, 0.5])
