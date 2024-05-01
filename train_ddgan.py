@@ -29,6 +29,8 @@ from data.lightning.CelebAHQDataModule import CelebAHQDataModule
 from torch.multiprocessing import Process
 import torch.distributed as dist
 import shutil
+def load_object(dct):
+    return types.SimpleNamespace(**dct)
 
 def copy_source(file, output_dir):
     shutil.copyfile(file, os.path.join(output_dir, os.path.basename(file)))
