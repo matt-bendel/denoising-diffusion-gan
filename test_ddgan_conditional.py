@@ -267,8 +267,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    seed_everything(1, workers=True)
-
     fname = 'configs/celebahq.yml'
 
     with open(fname, 'r') as f:
