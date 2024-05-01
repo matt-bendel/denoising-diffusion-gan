@@ -255,6 +255,7 @@ if __name__ == '__main__':
         mask = mask.cuda()
 
         sample_and_test(args, y, mask)
+        to_range_0_1 = lambda x: (x + 1.) / 2.
         torchvision.utils.save_image(to_range_0_1(x), 'samples_real.jpg')
 
         exit()
