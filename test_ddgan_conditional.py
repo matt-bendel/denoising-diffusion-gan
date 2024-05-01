@@ -255,7 +255,7 @@ if __name__ == '__main__':
         y = y.cuda()
         mask = mask.cuda()
 
-        y = y[3].unsqueeze(0).repeate(10, 1, 1, 1)
+        y = y[3].unsqueeze(0).repeat(10, 1, 1, 1)
 
         sample_and_test(args, y, mask)
         to_range_0_1 = lambda x: (x + 1.) / 2.
