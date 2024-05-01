@@ -133,9 +133,8 @@ def sample_from_model(coefficients, generator, n_time, x_init, T, opt, y, mask):
             t_time = t
             latent_z = torch.randn(x.size(0), opt.nz, device=x.device)  # .to(x.device)
             x_0 = generator(x, t_time, latent_z)
+            x_0 = (1 - mask) * x_0 + mask * y
             x_new = sample_posterior(coefficients, x_0, x, t)
-            y_new = sample_posterior(coefficients, y, x, t)
-            x_new = mask * y_new + (1 - mask) * x_new
             x = x_new.detach()
 
     return x
@@ -146,7 +145,7 @@ def sample_and_test(args, y, mask):
     torch.manual_seed(42)
     device = 'cuda:0'
 
-    to_range_0_1 = lambda x: x * 0.5 + 0.5
+    to_range_0_1 = lambda x: (x + 1) / 2
 
     netG = NCSNpp(args).to(device)
     ckpt = torch.load('/storage/matt_models/ddgan/netG_550.pth',
