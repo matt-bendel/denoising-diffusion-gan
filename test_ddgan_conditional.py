@@ -149,7 +149,7 @@ def sample_and_test(args, y, mask):
     to_range_0_1 = lambda x: (x + 1) / 2
 
     netG = NCSNpp(args).to(device)
-    ckpt = torch.load('/storage/matt_models/ddgan/netG_550.pth',
+    ckpt = torch.load('/storage/matt_models/ddgan/ddgan_celebahq_4/netG_725.pth',
                       map_location=device)
 
     # loading weights from ddp in single gpu
