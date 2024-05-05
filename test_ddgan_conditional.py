@@ -232,7 +232,7 @@ if __name__ == '__main__':
                         help='size of image')
 
     parser.add_argument('--nz', type=int, default=100)
-    parser.add_argument('--num_timesteps', type=int, default=2)
+    parser.add_argument('--num_timesteps', type=int, default=4)
 
     parser.add_argument('--z_emb_dim', type=int, default=256)
     parser.add_argument('--t_emb_dim', type=int, default=256)
