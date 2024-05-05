@@ -64,10 +64,10 @@ class CelebAHQDataModule(pl.LightningDataModule):
     def prepare_data(self):
         pass
 
-    def setup(self, stage: Optional[str] = None, transforms=False):
+    def setup(self, stage: Optional[str] = None, t=False):
         # Assign train/val datasets for use in dataloaders
-        if transforms:
-            transform = transforms
+        if t:
+            transform = t
         else:
             transform = transforms.Compose([transforms.ToTensor(), DataTransform(self.args)])
 
