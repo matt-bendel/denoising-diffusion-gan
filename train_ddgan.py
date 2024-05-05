@@ -246,7 +246,7 @@ def train(rank, gpu, args):
             cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
         dm = CelebAHQDataModule(cfg)
-        dm.setup(transforms=train_transform)
+        dm.setup(t=train_transform)
         dataset = dm.train
         # dataset = LMDBDataset(root='/datasets/celeba-lmdb/', name='celeba', train=True, transform=train_transform)
       
