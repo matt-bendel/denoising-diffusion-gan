@@ -149,7 +149,7 @@ def sample_and_test(args, y, mask):
     to_range_0_1 = lambda x: (x + 1) / 2
 
     netG = NCSNpp(args).to(device)
-    ckpt = torch.load('/storage/matt_models/ddgan/ddgan_celebahq_4/netG_725.pth',
+    ckpt = torch.load('/storage/matt_models/ddgan/ddgan_celebahq_8/netG_800.pth',
                       map_location=device)
 
     # loading weights from ddp in single gpu
@@ -232,7 +232,7 @@ if __name__ == '__main__':
                         help='size of image')
 
     parser.add_argument('--nz', type=int, default=100)
-    parser.add_argument('--num_timesteps', type=int, default=4)
+    parser.add_argument('--num_timesteps', type=int, default=8)
 
     parser.add_argument('--z_emb_dim', type=int, default=256)
     parser.add_argument('--t_emb_dim', type=int, default=256)
